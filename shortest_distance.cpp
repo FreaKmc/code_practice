@@ -26,7 +26,7 @@ void solve(int n){
 			if (car[i].x>dis)
 			{
 				dis *= 2;
-				continue;
+				break;
 			}
 		}
 	}
