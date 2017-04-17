@@ -17,7 +17,7 @@ class Task{
 public:
 	int id, l, st, dt;
 	Task(int a, int b, int c, int d) :id(a), l(b), st(c), dt(d){};
-	friend bool operator>(Task a,Task b){ return a.l < b.l; };
+	bool operator>(Task a,Task b){ return a.l < b.l; };
 };
 
 int main(){
