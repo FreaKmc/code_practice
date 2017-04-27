@@ -19,27 +19,22 @@ istream &ifs = cin;
 
 double StockGod(int n, int m, double p, const vector<vector<double>>& prices){
 	double res = 1.0;
-	vector<vector<double>> dp(m, vector<double>(n, (1-p)));
-	for (int i = 1; i <m; ++i){
+	vector<vector<double>> dp(m, vector<double>(n + 1, 1 - p));
+	dp[0][n] = 1;
+	for (int i = 1; i < m; ++i){
+		double maxP = 0.0;
 		for (int j = 0; j < n; ++j){
-			for (int k = 0; k < n;++k){
-				double tmp = dp[i - 1][k] / prices[i - 1][j] * prices[i][j] * (1 - p);
-				//keep the same stock
-				if (j == k){
-					dp[i][j] = max(dp[i][j], tmp / (1 - p));
-				}
-				//change the stock
-				else{
-					dp[i][j] = max(dp[i][j], tmp);
-				}
-			}
-			//not buy
-			dp[i][j] = max(dp[i][j], dp[i - 1][j]);
+			//keep stock
+			double price1 = dp[i - 1][j] / prices[i - 1][j] * prices[i][j];
+			//sell other stock to buy this one
+			double price2 = dp[i - 1][n] / prices[i - 1][j] * prices[i][j] * (1 - p);
+			dp[i][j] = max(price1, price2);
+			maxP = maxP>dp[i][j] ? maxP : dp[i][j];
 		}
+		//not buy stock
+		dp[i][n] = max(maxP, dp[i - 1][n]);
 	}
-	for (int i = 0; i < n; ++i)
-		res = res>dp[m-1][i] ? res : dp[m-1][i];
-	return res;
+	return dp[m - 1][n];
 }
 /******************************½áÊøÐ´´úÂë******************************/
 
